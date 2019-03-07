@@ -9,7 +9,6 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -51,9 +50,7 @@ public class ForgeEventHandlers
         float fRandom = new Random().nextFloat();
 
         if(fRandom < g_fChance) {
-            BlockPos Position = eEntity.getPosition();
-            ItemStack ItemDrops = new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1);
-            evEvent.getDrops().add(new EntityItem(eEntity.getEntityWorld(), Position.getX(), Position.getY(), Position.getZ(), ItemDrops));
+            evEvent.getDrops().add(new EntityItem(eEntity.getEntityWorld(), eEntity.posX, eEntity.posY, eEntity.posZ, new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1)));
         }
 
         if(g_bDebugMode) {
