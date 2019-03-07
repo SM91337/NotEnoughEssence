@@ -50,7 +50,7 @@ public class ForgeEventHandlers
         float fRandom = new Random().nextFloat();
 
         if(fRandom < g_fChance) {
-            evEvent.getDrops().add(new EntityItem(eEntity.getEntityWorld(), eEntity.posX, eEntity.posY, eEntity.posZ, new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1)));
+            evEvent.getDrops().add(new EntityItem(eWorld, eEntity.posX, eEntity.posY, eEntity.posZ, new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1)));
         }
 
         if(g_bDebugMode) {
