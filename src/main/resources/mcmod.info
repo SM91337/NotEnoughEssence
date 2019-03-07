@@ -1,0 +1,16 @@
+[
+{
+  "modid": "notenoughessence",
+  "name": "Not Enough Essence",
+  "description": "Adds conditional essence drops to hostile mobs.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["SM9"],
+  "credits": "Big thanks to FatherToast for helping with my first mod!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
