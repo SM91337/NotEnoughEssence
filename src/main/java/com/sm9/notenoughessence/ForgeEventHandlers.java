@@ -1,7 +1,5 @@
 package com.sm9.notenoughessence;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
@@ -9,6 +7,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -23,15 +22,35 @@ public class ForgeEventHandlers
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onLivingDrops(LivingDropsEvent evEvent)
     {
-        Entity eEntity = evEvent.getEntity();
-        EntityPlayerSP ePlayer = Minecraft.getMinecraft().player;
-        World eWorld = eEntity.world;
+        DamageSource eDamageSource = evEvent.getSource();
+        Entity eDamageEntity = eDamageSource.getTrueSource();
 
-        if(!eEntity.isCreatureType(EnumCreatureType.MONSTER, false) || !(evEvent.getSource().getTrueSource() instanceof EntityPlayer)) {
+        if(eDamageEntity == null || !(eDamageEntity instanceof EntityPlayer)) {
             return;
         }
 
-        if(g_bNoZombies && eEntity instanceof EntityZombie) {
+        Entity eAttackVictim = evEvent.getEntity();
+
+        if(eAttackVictim == null || !eAttackVictim.isCreatureType(EnumCreatureType.MONSTER, false)) {
+            return;
+        }
+
+        World eWorld = eAttackVictim.world;
+        EntityPlayer ePlayer = (EntityPlayer) eDamageEntity;
+
+        if(ePlayer == null) {
+            return;
+        }
+
+        if(g_bMeleeOnly && eDamageSource.isProjectile()) {
+            if(g_bDebugMode) {
+                String sMessage = String.format("[NEE] Ignoring none melee kill.");
+                ePlayer.sendMessage(new TextComponentString(sMessage));
+            }
+            return;
+        }
+
+        if(g_bNoZombies && eAttackVictim instanceof EntityZombie) {
             if(g_bDebugMode) {
                 String sMessage = String.format("[NEE] Ignoring zombie.");
                 ePlayer.sendMessage(new TextComponentString(sMessage));
@@ -47,14 +66,16 @@ public class ForgeEventHandlers
             return;
         }
 
-        float fRandom = new Random().nextFloat();
+        Random rRandom = g_bWorldRandom ? eWorld.rand : new Random();
 
-        if(fRandom < g_fChance) {
-            evEvent.getDrops().add(new EntityItem(eWorld, eEntity.posX, eEntity.posY, eEntity.posZ, new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1)));
+        int iRandom = Math.round(rRandom.nextFloat() * 100.0f);
+
+        if(iRandom <= g_iChance) {
+            evEvent.getDrops().add(new EntityItem(eWorld, eAttackVictim.posX, eAttackVictim.posY, eAttackVictim.posZ, new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1)));
         }
 
         if(g_bDebugMode) {
-            String sMessage = String.format("[NEE] Drop Chance: %.2f, RNG: %.2f, Should Drop: %s", g_fChance, fRandom, fRandom < g_fChance ? "true" : "false");
+            String sMessage = String.format("[NEE] Drop Chance: %d, RNG: %d, Should Drop: %s", g_iChance, iRandom, iRandom < g_iChance ? "true" : "false");
             ePlayer.sendMessage(new TextComponentString(sMessage));
         }
     }

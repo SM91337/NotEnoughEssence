@@ -15,15 +15,16 @@ public class NotEnoughEssence
 {
     public static final String MODID = "notenoughessence";
     public static final String NAME = "Not Enough Essence";
-    public static final String VERSION = "0.1";
+    public static final String VERSION = "0.2";
 
     public static Logger g_lLogger;
     public static boolean g_bDebugMode = false;
     public static boolean g_bNoZombies = true;
     public static boolean g_bNightOnly = true;
     public static boolean g_bMeleeOnly = true;
+    public static boolean g_bWorldRandom = true;
 
-    public static float g_fChance = 0.20f;
+    public static int g_iChance = 20;
     public static Configuration g_cConfig;
 
     @Mod.EventHandler
@@ -49,11 +50,12 @@ public class NotEnoughEssence
     public static void LoadConfig() {
         g_cConfig.load();
 
-        g_bDebugMode = g_cConfig.getBoolean("DebugMode", Configuration.CATEGORY_GENERAL, g_bDebugMode, "Prints debug information on hostile entity death");
-        g_fChance = g_cConfig.getFloat("DropChance", Configuration.CATEGORY_GENERAL, 0.2f, 0.0f, 1.0f, "Drop chance for hostiles");
+        g_bDebugMode = g_cConfig.getBoolean("DebugMode", Configuration.CATEGORY_GENERAL, false, "Prints debug information on hostile entity death");
+        g_iChance = g_cConfig.getInt("DropChance", Configuration.CATEGORY_GENERAL, 20, 0, 100, "Drop chance for hostiles");
         g_bNoZombies = g_cConfig.getBoolean("NoZombies", Configuration.CATEGORY_GENERAL, g_bNoZombies, "Exclude zombies when dropping essence");
         g_bNightOnly = g_cConfig.getBoolean("NightOnly", Configuration.CATEGORY_GENERAL, g_bNightOnly, "Only allow essence drops at night");
         g_bMeleeOnly = g_cConfig.getBoolean("MeleeOnly", Configuration.CATEGORY_GENERAL, g_bMeleeOnly, "Only allow essence drops when killed with a melee weapon");
+        g_bWorldRandom = g_cConfig.getBoolean("WorldRandom", Configuration.CATEGORY_GENERAL, g_bWorldRandom, "Use world random generator instead of built in java one");
 
         g_cConfig.save();
     }
