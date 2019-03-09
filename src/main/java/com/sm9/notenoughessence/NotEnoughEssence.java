@@ -9,13 +9,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.File;
 
-@Mod(modid = NotEnoughEssence.MODID, name = NotEnoughEssence.NAME, version = NotEnoughEssence.VERSION)
+@Mod(modid = NotEnoughEssence.MODID, name = NotEnoughEssence.NAME,
+        version = NotEnoughEssence.VERSION,
+        dependencies = NotEnoughEssence.DEPENDENCIES,
+        acceptedMinecraftVersions = "1.12.2",
+        acceptableRemoteVersions = "*")
 
 public class NotEnoughEssence
 {
     public static final String MODID = "notenoughessence";
     public static final String NAME = "Not Enough Essence";
-    public static final String VERSION = "0.2";
+    public static final String VERSION = "${version}";
+    public static final String MIN_FORGE_VER = "14.23.5.2815";
+    public static final String DEPENDENCIES = "after:forge@[" + NotEnoughEssence.MIN_FORGE_VER + ",)" + ";required-after:mysticalagriculture@[1.7.0,)";
 
     public static Logger g_lLogger;
     public static boolean g_bDebugMode = false;

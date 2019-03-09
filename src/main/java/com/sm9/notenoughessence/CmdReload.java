@@ -15,13 +15,13 @@ public class CmdReload extends CommandBase {
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender commandSender) {
         return "neereload";
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer localServer, ICommandSender commandSender, String[] sArgs) throws CommandException {
         LoadConfig();
-        sender.sendMessage(new TextComponentString("Not Enough Essence config reloaded successfully!"));
+        commandSender.sendMessage(new TextComponentString("Not Enough Essence config reloaded successfully!"));
     }
 }
