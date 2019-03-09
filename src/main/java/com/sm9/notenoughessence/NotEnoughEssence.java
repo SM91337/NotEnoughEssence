@@ -1,8 +1,10 @@
 package com.sm9.notenoughessence;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +34,7 @@ public class NotEnoughEssence
 
     public static int g_iChance = 20;
     public static Configuration g_cConfig;
+    public static Item maCrafting;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent evEvent)
@@ -49,11 +52,17 @@ public class NotEnoughEssence
     }
 
     @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent evEvent) {
+        maCrafting = Item.getByNameOrId("mysticalagriculture:crafting");
+    }
+
+    @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent evEvent) {
         evEvent.registerServerCommand(new CmdReload());
     }
 
-    public static void LoadConfig() {
+    public static void LoadConfig()
+    {
         g_cConfig.load();
 
         g_bDebugMode = g_cConfig.getBoolean("DebugMode", Configuration.CATEGORY_GENERAL, false, "Prints debug information on hostile entity death");

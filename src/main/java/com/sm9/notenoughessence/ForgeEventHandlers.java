@@ -6,24 +6,30 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeHell;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 import static com.sm9.notenoughessence.NotEnoughEssence.*;
 
 public class ForgeEventHandlers
 {
-    @SubscribeEvent(priority = EventPriority.NORMAL)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLivingDrops(LivingDropsEvent evEvent)
     {
+        ArrayList<EntityItem> entityDrops = (ArrayList) evEvent.getDrops();
+
+        if(entityDrops == null) {
+            return;
+        }
+
         DamageSource damageSource = evEvent.getSource();
         Entity damageEntity = damageSource.getTrueSource();
 
@@ -40,7 +46,7 @@ public class ForgeEventHandlers
         World localWorld = damageVictim.world;
         EntityPlayer localPlayer = (EntityPlayer) damageEntity;
 
-        if(localWorld == null || localPlayer == null) {
+        if(localPlayer == null || localWorld == null) {
             return;
         }
 
@@ -74,7 +80,7 @@ public class ForgeEventHandlers
         int iRandom = Math.round(rRandom.nextFloat() * 100.0f);
 
         if(iRandom <= g_iChance) {
-            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(Item.getByNameOrId("mysticalagriculture:crafting"), 1)));
+            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1)));
         }
 
         if(g_bDebugMode) {
