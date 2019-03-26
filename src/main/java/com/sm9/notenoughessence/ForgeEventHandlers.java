@@ -1,10 +1,10 @@
 package com.sm9.notenoughessence;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -39,7 +39,7 @@ public class ForgeEventHandlers
 
         Entity damageVictim = evEvent.getEntity();
 
-        if(damageVictim == null || !damageVictim.isCreatureType(EnumCreatureType.MONSTER, false)) {
+        if(damageVictim == null) {
             return;
         }
 
@@ -47,6 +47,10 @@ public class ForgeEventHandlers
         EntityPlayer localPlayer = (EntityPlayer) damageEntity;
 
         if(localPlayer == null || localWorld == null) {
+            return;
+        }
+
+        if (!(damageVictim instanceof IMob)) {
             return;
         }
 
@@ -79,13 +83,13 @@ public class ForgeEventHandlers
         Random rRandom = g_bWorldRandom ? localWorld.rand : new Random();
         int iRandom = Math.round(rRandom.nextFloat() * 100.0f);
 
-        if(iRandom <= g_iChance) {
-            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1)));
+        if(g_bDebugMode) {
+            String sMessage = String.format("[NEE] Drop Chance: %d, RNG: %d, Should Drop: %s", g_iChance, iRandom, iRandom <= g_iChance ? "true" : "false");
+            localPlayer.sendMessage(new TextComponentString(sMessage));
         }
 
-        if(g_bDebugMode) {
-            String sMessage = String.format("[NEE] Drop Chance: %d, RNG: %d, Should Drop: %s", g_iChance, iRandom, iRandom < g_iChance ? "true" : "false");
-            localPlayer.sendMessage(new TextComponentString(sMessage));
+        if(iRandom <= g_iChance) {
+            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1)));
         }
     }
 }

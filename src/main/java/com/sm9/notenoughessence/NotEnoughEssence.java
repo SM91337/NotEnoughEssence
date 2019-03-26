@@ -21,7 +21,7 @@ public class NotEnoughEssence
 {
     public static final String MODID = "notenoughessence";
     public static final String NAME = "Not Enough Essence";
-    public static final String VERSION = "${version}";
+    public static final String VERSION = "0.3.2";
     public static final String MIN_FORGE_VER = "14.23.5.2815";
     public static final String DEPENDENCIES = "after:forge@[" + NotEnoughEssence.MIN_FORGE_VER + ",)" + ";required-after:mysticalagriculture@[1.7.0,)";
 
