@@ -26,7 +26,7 @@ public class General {
 
             cLazz = EntityList.getClass(new ResourceLocation(blackListedMob));
 
-            if(cLazz == null) {
+            if (cLazz == null) {
                 continue;
             }
 

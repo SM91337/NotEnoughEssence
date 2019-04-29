@@ -25,6 +25,7 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static com.sm9.notenoughessence.NotEnoughEssence.maCrafting;
@@ -60,6 +61,21 @@ public class ForgeEvents {
         if (entityDrops == null) {
             return;
         }
+
+        ItemStack itemStack;
+        ArrayList<EntityItem> dropsToRemove = new ArrayList<>();
+
+        for (EntityItem item : entityDrops) {
+            itemStack = item.getItem();
+
+            if (!Objects.requireNonNull(itemStack.getItem().getRegistryName()).toString().equals("mysticalagriculture:crafting") || itemStack.getMetadata() != 0) {
+                continue;
+            }
+
+            dropsToRemove.add(item);
+        }
+
+        entityDrops.removeAll(dropsToRemove);
 
         DamageSource damageSource = evEvent.getSource();
         Entity damageEntity = damageSource.getTrueSource();
