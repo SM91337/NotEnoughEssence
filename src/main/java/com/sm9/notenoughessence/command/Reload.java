@@ -1,27 +1,29 @@
-package com.sm9.notenoughessence;
+package com.sm9.notenoughessence.command;
 
+import com.sm9.notenoughessence.common.Config.MainConfig;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
-import static com.sm9.notenoughessence.NotEnoughEssence.*;
+import javax.annotation.Nonnull;
 
-public class CmdReload extends CommandBase {
+public class Reload extends CommandBase {
+    @Nonnull
     @Override
     public String getName() {
         return "neereload";
     }
 
+    @Nonnull
     @Override
-    public String getUsage(ICommandSender commandSender) {
+    public String getUsage(@Nonnull ICommandSender commandSender) {
         return "neereload";
     }
 
     @Override
-    public void execute(MinecraftServer localServer, ICommandSender commandSender, String[] sArgs) throws CommandException {
-        LoadConfig();
+    public void execute(@Nonnull MinecraftServer localServer, ICommandSender commandSender, @Nonnull String[] sArgs) {
+        MainConfig.loadConfig();
         commandSender.sendMessage(new TextComponentString("Not Enough Essence config reloaded successfully!"));
     }
 }
