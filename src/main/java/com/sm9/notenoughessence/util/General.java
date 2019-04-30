@@ -26,10 +26,6 @@ public class General {
 
             cLazz = EntityList.getClass(new ResourceLocation(blackListedMob));
 
-            if (cLazz == null) {
-                continue;
-            }
-
             if (cLazz == null || !findEntityIdByClass(cLazz).equals(blackListedMob) || !EntityLiving.class.isAssignableFrom(cLazz)) {
                 debugToConsole(Level.ERROR, "Invalid blacklisted mob specified: %s", blackListedMob);
                 continue;

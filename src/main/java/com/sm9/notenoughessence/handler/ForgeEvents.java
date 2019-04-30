@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -25,7 +26,6 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import static com.sm9.notenoughessence.NotEnoughEssence.maCrafting;
@@ -48,6 +48,7 @@ public class ForgeEvents {
 
     public static void postInit(FMLPostInitializationEvent evEvent) {
         loadConfig();
+        maCrafting = Item.getByNameOrId("mysticalagriculture:crafting");
     }
 
     public static void onWorldLoad(FMLServerStartingEvent evEvent) {
@@ -56,6 +57,10 @@ public class ForgeEvents {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLivingDrops(LivingDropsEvent evEvent) {
+        if (maCrafting == null) {
+            return;
+        }
+
         List<EntityItem> entityDrops = evEvent.getDrops();
 
         if (entityDrops == null) {
@@ -68,7 +73,7 @@ public class ForgeEvents {
         for (EntityItem item : entityDrops) {
             itemStack = item.getItem();
 
-            if (!Objects.requireNonNull(itemStack.getItem().getRegistryName()).toString().equals("mysticalagriculture:crafting") || itemStack.getMetadata() != 0) {
+            if (!itemStack.getItem().equals(maCrafting) || itemStack.getMetadata() != 0) {
                 continue;
             }
 
@@ -139,7 +144,7 @@ public class ForgeEvents {
         }
 
         if (iRandom <= dropChance) {
-            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1)));
+            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1, 0)));
         }
     }
 }
