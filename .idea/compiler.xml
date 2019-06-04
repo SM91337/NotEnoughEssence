@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="NotEnoughEssence.api" target="1.8" />
+      <module name="NotEnoughEssence.main" target="1.8" />
+      <module name="NotEnoughEssence.test" target="1.8" />
+      <module name="NotEnoughEssence_api" target="1.8" />
+      <module name="NotEnoughEssence_main" target="1.8" />
+      <module name="NotEnoughEssence_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

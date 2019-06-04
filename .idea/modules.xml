@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/NotEnoughEssence.iml" filepath="$PROJECT_DIR$/.idea/modules/NotEnoughEssence.iml" group="NotEnoughEssence" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/NotEnoughEssence_api.iml" filepath="$PROJECT_DIR$/.idea/modules/NotEnoughEssence_api.iml" group="NotEnoughEssence" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/NotEnoughEssence_main.iml" filepath="$PROJECT_DIR$/.idea/modules/NotEnoughEssence_main.iml" group="NotEnoughEssence" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/NotEnoughEssence_test.iml" filepath="$PROJECT_DIR$/.idea/modules/NotEnoughEssence_test.iml" group="NotEnoughEssence" />
+    </modules>
+  </component>
+</project>
