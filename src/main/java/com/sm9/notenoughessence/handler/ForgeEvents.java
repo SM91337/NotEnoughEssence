@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -35,10 +36,10 @@ import static com.sm9.notenoughessence.common.Config.MainConfig.*;
 public class ForgeEvents {
     public static ArrayList<String> blacklistedMobs;
 
-    public static void preInit(FMLPreInitializationEvent evEvent) {
+    public static void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ForgeEvents());
 
-        File configDirectory = new File(evEvent.getModConfigurationDirectory(), "sm9/NotEnoughEssence");
+        File configDirectory = new File(event.getModConfigurationDirectory(), "sm9/NotEnoughEssence");
         File configFile = new File(configDirectory, "main.cfg");
 
         neeLogger = LogManager.getLogger("NotEnoughEssence");
@@ -46,22 +47,22 @@ public class ForgeEvents {
         blacklistedMobs = new ArrayList<>();
     }
 
-    public static void postInit(FMLPostInitializationEvent evEvent) {
+    public static void postInit(FMLPostInitializationEvent event) {
         loadConfig();
         maCrafting = Item.getByNameOrId("mysticalagriculture:crafting");
     }
 
-    public static void onWorldLoad(FMLServerStartingEvent evEvent) {
-        evEvent.registerServerCommand(new Reload());
+    public static void onWorldLoad(FMLServerStartingEvent event) {
+        event.registerServerCommand(new Reload());
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onLivingDrops(LivingDropsEvent evEvent) {
+    public void onLivingDrops(LivingDropsEvent event) {
         if (maCrafting == null) {
             return;
         }
 
-        List<EntityItem> entityDrops = evEvent.getDrops();
+        List<EntityItem> entityDrops = event.getDrops();
 
         if (entityDrops == null) {
             return;
@@ -82,31 +83,33 @@ public class ForgeEvents {
 
         entityDrops.removeAll(dropsToRemove);
 
-        DamageSource damageSource = evEvent.getSource();
+        DamageSource damageSource = event.getSource();
         Entity damageEntity = damageSource.getTrueSource();
 
         if (!(damageEntity instanceof EntityPlayer)) {
             return;
         }
 
-        EntityLivingBase damageVictim = evEvent.getEntityLiving();
+        EntityLivingBase damageVictim = event.getEntityLiving();
 
         if (damageVictim == null) {
             return;
         }
 
-        World localWorld = damageVictim.world;
-        EntityPlayer localPlayer = (EntityPlayer) damageEntity;
+        World worldAny = damageVictim.world;
 
-        if (localWorld == null) {
+        if (!(worldAny instanceof WorldServer)) {
             return;
         }
+
+        WorldServer worldServer = (WorldServer) worldAny;
+        EntityPlayer localPlayer = (EntityPlayer) damageEntity;
 
         if (!(damageVictim instanceof IMob) && !damageVictim.isCreatureType(EnumCreatureType.MONSTER, false)) {
             return;
         }
 
-        int iLocalDimension = localPlayer.dimension;
+        int localDimension = worldServer.provider.getDimension();
 
         if (meleeOnly && damageSource.isProjectile()) {
             if (debugMode) {
@@ -129,14 +132,14 @@ public class ForgeEvents {
             return;
         }
 
-        if (nightOnly && localWorld.isDaytime() && iLocalDimension != -1) {
+        if (nightOnly && worldServer.isDaytime() && localDimension != -1) {
             if (debugMode) {
                 General.printToPlayer(localPlayer, "Ignoring kill, must be night time.");
             }
             return;
         }
 
-        Random rRandom = worldRandom ? localWorld.rand : new Random();
+        Random rRandom = worldRandom ? worldServer.rand : new Random();
         int iRandom = Math.round(rRandom.nextFloat() * 100.0f);
 
         if (debugMode) {
@@ -144,7 +147,7 @@ public class ForgeEvents {
         }
 
         if (iRandom <= dropChance) {
-            evEvent.getDrops().add(new EntityItem(localWorld, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1, 0)));
+            event.getDrops().add(new EntityItem(worldServer, damageVictim.posX, damageVictim.posY, damageVictim.posZ, new ItemStack(maCrafting, 1, 0)));
         }
     }
 }

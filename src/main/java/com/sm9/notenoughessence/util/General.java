@@ -20,7 +20,7 @@ public class General {
         Class<? extends Entity> cLazz;
 
         for (String blackListedMob : blacklistConfig) {
-            if (blackListedMob == null || blackListedMob.length() < 1 || blackListedMob.isEmpty()) {
+            if (blackListedMob == null || blackListedMob.isEmpty()) {
                 continue;
             }
 
@@ -50,12 +50,12 @@ public class General {
         return key == null ? null : key.toString();
     }
 
-    public static void printToPlayer(EntityPlayer entityPlayer, String sFormat, Object... oArgs) {
-        String sMessage = new Formatter().format(sFormat, oArgs).toString();
-        entityPlayer.sendMessage(new TextComponentString("[NEE] " + sMessage));
+    public static void printToPlayer(EntityPlayer entityPlayer, String format, Object... args) {
+        String message = new Formatter().format(format, args).toString();
+        entityPlayer.sendMessage(new TextComponentString("[NEE] " + message));
     }
 
-    public static void debugToConsole(Level logLevel, String sFormat, Object... oArgs) {
-        neeLogger.log(logLevel, new Formatter().format(sFormat, oArgs).toString());
+    public static void debugToConsole(Level logLevel, String format, Object... args) {
+        neeLogger.log(logLevel, new Formatter().format(format, args).toString());
     }
 }
